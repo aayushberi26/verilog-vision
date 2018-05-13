@@ -35,19 +35,14 @@ class CircuitPreprocessor:
                 rects.append((x,y,w,h))
         return rects
 
-    def view_bounding_boxes(self):
+    def view_bounding_rects(self):
         for x,y,w,h in self.bounding_rects:
             cv2.rectangle(self.img, (x, y), (x+w, y+h), (0, 255, 0), 2)
-        # display until kill signal given via ESC key
         cv2.drawContours(self.img, self.contours, -1, (255, 255, 0), 1)        
         cv2.imshow("contours", self.img)
-        ESC = 27
-        while True:
-            keycode = cv2.waitKey()
-            if keycode != -1:
-                keycode &= 0xFF
-                if keycode == ESC:
-                    break
+
+        # display until kill signal given via ESC key
+        keycode = cv2.waitKey()
         cv2.destroyAllWindows()  
 
     def extract_gates(self):
@@ -61,4 +56,4 @@ class CircuitPreprocessor:
 if __name__ == '__main__':
     cp = CircuitPreprocessor(sys.argv[1])
     cp.extract_gates()
-    cp.view_bounding_boxes()
+    cp.view_bounding_rects()
