@@ -4,7 +4,7 @@ import sys
 
 class CircuitPreprocessor:
     '''
-    adapted from https://gist.github.com/bigsnarfdude/d811e31ee17495f82f10db12651ae82d
+    Adapted from https://gist.github.com/bigsnarfdude/d811e31ee17495f82f10db12651ae82d
     '''
     def __init__(self, img_path):
         # read and scale down image from command line arg
@@ -31,7 +31,13 @@ class CircuitPreprocessor:
         for contour in self.contours:
             x, y, w, h = cv2.boundingRect(contour)
             # constrain to only bound logic gate sized contours
-            if w > 30 and w < 300 and h > 30 and h < 300:
+            if w > 30 and w < 275 and h > 30 and h < 275:
+                hull = cv2.convexHull(contour)
+                epsilon = 0.1*cv2.arcLength(contour,True)
+                hull_approx = cv2.approxPolyDP(hull, epsilon, True)
+                hull_area = cv2.contourArea(hull_approx)
+                print (x, y, w, h)
+                print (hull_area)
                 rects.append((x,y,w,h))
         return rects
 
